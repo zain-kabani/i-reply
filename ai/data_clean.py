@@ -49,7 +49,8 @@ def cleanup(folder):
     base = folder + "/inbox"
     convos = os.listdir(base)
 
-    dest = open("fbMessages.txt", "w")
+    all_messages = []
+
     for convo in convos:
         
         convo_base = base  + "/" + convo + "/"
@@ -60,23 +61,36 @@ def cleanup(folder):
             
             f = open(message_file)
             data = json.load(f)
-            if len(data["participants"]) < 3:
+            if len(data["participants"]) == 2:
 
                 if len(data["messages"]) > 5:
 
                     for message in reversed(data["messages"]):
                         if "content" in message:
-                            message_str = "[" + str(message["timestamp_ms"]) + "] "
-                            message_str += message["sender_name"] + ": "
-                            message_str += clean_text(message["content"].replace('\n',' ')) + "\n"
-                            dest.write(message_str)
-            f.close()
+                            message_obj = {
+                                "sender": message["sender_name"],
+                                "content": clean_text(message["content"].replace('\n',' '))
+                            }
+
+                            all_messages.append(message_obj)
+
+            f.close()        
 
 
-    dest.close()
-        
 
+
+    i = 0
+    dest = open("fbMessages.txt", "w")
+    while i < len(all_messages):
+        sender = all_messages[i]["sender"]
+        curr_message = all_messages[i]["content"]
+        while i+1 < len(all_messages) and all_messages[i+1]["sender"] == sender:
+            i += 1
+            curr_message += " " + all_messages[i]["content"]
+        dest.write(sender + ": " + curr_message + "\n")
+        i += 1
     
+    dest.close()
 
 
 if __name__ == "__main__":
