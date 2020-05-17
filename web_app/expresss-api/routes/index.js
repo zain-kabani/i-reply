@@ -7,9 +7,8 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/test_api', (req, res, next) => {
-  console.log("HELLO")
-  res.json({"thing": "thing"})
-
+  console.log("request: "+ req.body);
+  res.json({user: "Bot", message: req.body.message});
 });
 
 module.exports = router;

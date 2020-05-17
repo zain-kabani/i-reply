@@ -10,6 +10,10 @@
   --title-background-colour: #2c3f59;
 }
 
+a {
+	color: var(--title-text-colour);
+}
+
 .App {
 	display: flex;
 	height: 100vh;
@@ -19,6 +23,11 @@
 	justify-content: center;
 	text-align: center;
 }
+
+.App h1 {
+	color: var(--title-text-colour);
+	font-family: 'Quicksand', sans-serif;
+	}
 
 .chatbox {
   font-family: 'Quicksand', sans-serif;

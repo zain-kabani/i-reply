@@ -10,16 +10,7 @@ class ChatBox extends React.Component {
 
         this.state = {
             username: "User",
-            chatlog: [
-            {
-                user: "User",
-                message: <p>user input yeet</p>
-            },
-            {
-                user: "Bot",
-                message: <p>bot output yote</p>
-            },
-            ]
+            chatlog: []
         };
     }
 
@@ -28,6 +19,17 @@ class ChatBox extends React.Component {
         chatRef.scrollTop = chatRef.scrollHeight;
     }
 
+    addMessage = (databody) => {
+        // add the message to the chatlog
+        this.setState((prevState) => ({chatlog: [...prevState.chatlog, 
+            {user: databody.user, 
+            message: <p>{databody.message}</p>}]
+        }), () => {
+            // clear message input box after adding new message to chatlog
+            ReactDOM.findDOMNode(this.refs.message).value = "";
+        });
+
+    }
 
     submitMessage = (eh) => {
         // prevent web page refresh
@@ -37,37 +39,19 @@ class ChatBox extends React.Component {
         if (userMessage.trim() === ""){
             console.log("empty input");
         } else {
-            // add the message to the chatlog
-            this.setState((prevState) => ({chatlog: [...prevState.chatlog, 
-                {user: this.state.username, 
-                message: <p>{userMessage}</p>}]
-            }), () => {
-                // clear message input box after adding new message to chatlog
-                ReactDOM.findDOMNode(this.refs.message).value = "";
-            });
+            let databody = {"user": this.state.username, "message": userMessage};
+            this.addMessage(databody);
 
             // send the message to the backend
-            /*
-            let databody = {"user": this.state.username, "message": userMessage};
-            console.log(databody);
-            fetch('/test_api', {
-                method: 'POST',
-                body: JSON.stringify(databody),
-                headers: {
-                    'Content-Type': 'application/json'
-            },})
-            .then(res => res.json())
-            .then(data => console.log(data));
-            */
-           const requestOptions = {
+            const requestOptions = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ title: 'React POST Request Example' })
+            body: JSON.stringify(databody)
             };
             console.log(requestOptions);
             fetch('/test_api', requestOptions)
                 .then(response => response.json())
-                .then(data => this.setState({ postId: data.id }));
+                .then(data => this.addMessage({"user": "Bot", "message" : data.message}));
         }
     }
 
