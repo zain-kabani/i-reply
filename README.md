@@ -1,5 +1,7 @@
 # I-Reply
 
+![Image description](screenshot.png)
+
 ## Inspiration
 
 Remembered an episode of Silicon Valley where Gilfoyle created a realistic AI to continue conversation with Dinesh and thought that was really cool. Also recently learned that you could download your facebook data, including messages which would provide a large dataset to train a model on!
