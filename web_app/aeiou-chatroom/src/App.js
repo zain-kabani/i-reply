@@ -8,31 +8,20 @@ import ChatBox from "./ChatBox.js"
 function App() {
 
   return (
-    /*
+  <Router>
     <div className="App">
-      <ChatBox />
+      <Switch>
+        /* exact specifies rendering to exactly '/' */
+        <Route path="/" exact > 
+          <Link to="/LoginPage">Login</Link>
+        </Route>
+
+        <Route path="/LoginPage" component={LoginPage}/>
+
+        <Route path="/ChatBox" component={ChatBox}/>
+      </Switch>
     </div>
-    */
-
-    <div className="App">
-      <Router>
-        <Switch>
-
-          <Route path="/LoginPage">
-            <LoginPage />
-          </Route>
-
-          <Route path="/">
-            <Link  to="/LoginPage">Login</Link>
-          </Route>
-
-          <Route path="/ChatBox"> 
-              <ChatBox />
-          </Route>
-
-        </Switch>
-      </Router>
-    </div>
+  </Router>
   );
 }
 
