@@ -34,29 +34,18 @@ class LoginPage extends React.Component {
 
         return (
             <div className="Login">
-                <Router>
-                    <Switch>
-                        <Route path="/LoginPage">
-                            <h1>Login</h1>
-                            <form className="userinput" onSubmit={ (e) => this.login(e)}>
-                                <FormGroup controlId="email" validationState={ formSubmitted ? (errors.email ? 'error' : 'success') : null }>
-                                    <FormControl type="text" name="email" placeholder="Email" />
+                <h1>Login</h1>
+                <form className="userinput" onSubmit={ (e) => this.login(e)}>
+                    <FormGroup controlId="email" validationState={ formSubmitted ? (errors.email ? 'error' : 'success') : null }>
+                        <FormControl type="text" name="email" placeholder="Email" />
 
-                                </FormGroup>
-                                <FormGroup controlId="password" validationState={ formSubmitted ? (errors.password ? 'error' : 'success') : null }>
-                                    <FormControl type="password" name="password" placeholder="Password" />
-    
-                                </FormGroup>
-                                <Button type="submit" bsStyle="primary">Sign-In</Button>
-                            </form>
-                        </Route>
+                    </FormGroup>
+                    <FormGroup controlId="password" validationState={ formSubmitted ? (errors.password ? 'error' : 'success') : null }>
+                        <FormControl type="password" name="password" placeholder="Password" />
 
-                        <Route path="/ChatBox"> 
-                            <ChatBox />
-                        </Route>
-
-                    </Switch>
-                </Router>
+                    </FormGroup>
+                    <Button type="submit" bsStyle="primary">Sign-In</Button>
+                </form>
             </div>
         );
     }

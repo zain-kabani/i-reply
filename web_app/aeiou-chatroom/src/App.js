@@ -2,8 +2,9 @@ import React from 'react';
 import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
 
 import './App.css';
-import LoginPage from "./LoginPage.js"
-import ChatBox from "./ChatBox.js"
+import Landing from "./Landing.js";
+import LoginPage from "./LoginPage.js";
+import ChatBox from "./ChatBox.js";
 
 function App() {
 
@@ -12,9 +13,7 @@ function App() {
     <div className="App">
       <Switch>
         /* exact specifies rendering to exactly '/' */
-        <Route path="/" exact > 
-          <Link to="/LoginPage">Login</Link>
-        </Route>
+        <Route path="/" exact component={Landing}/>
 
         <Route path="/LoginPage" component={LoginPage}/>
 
