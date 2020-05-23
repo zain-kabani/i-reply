@@ -4,20 +4,24 @@ import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
 import { Row, FormGroup, FormControl,  Button,  } from 'react-bootstrap';
 
 import './App.css';
-import ChatBox from "./ChatBox.js"
 
-class LoginPage extends React.Component {
+class Landing extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             username: "",
+            email: "",
             password: "",
         };
     }
 
     setUsername(username) {
         this.setState({username: username});
+    }
+
+    setEmail(email){
+        this.setState({email: email});
     }
 
     setPassword(password){
@@ -45,11 +49,12 @@ class LoginPage extends React.Component {
 
     render() {
 
-        const { username, password } = this.state;
+        const { username, email, password } = this.state;
 
         return (
-            <div className="Login">
-                <h1>Login</h1>
+            <div className="Register">
+                <h1>Register</h1>
+                <Link to="/Login">Back to Login</Link>
                 <form className="userinput" onSubmit={ (e) => this.login(e)}>
                     <FormGroup controlId="username">
                         <FormControl 
@@ -58,6 +63,15 @@ class LoginPage extends React.Component {
                             name="username" 
                             onChange={e => this.setUsername(e.target.value)}
                             placeholder="Username" />
+                    </FormGroup>
+
+                    <FormGroup controlId="email">
+                        <FormControl 
+                            type="email" 
+                            value={email} 
+                            name="email" 
+                            onChange={e => this.setEmail(e.target.value)}
+                            placeholder="Email" />
                     </FormGroup>
 
                     <FormGroup controlId="password">
@@ -72,13 +86,13 @@ class LoginPage extends React.Component {
                     <Button
                         type="submit" 
                         disabled={!this.validateForm()}
-                        bsStyle="primary">Sign-In
+                        bsStyle="primary">Sign Up
                     </Button>
                 </form>
-                <Link to="/Register">Sign Up!</Link>
-            </div>
+        </div>
         );
     }
+
 }
 
-export default LoginPage;
+export default Landing;
