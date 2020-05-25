@@ -1,7 +1,7 @@
 import React from 'react';
-import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
-
-import { Row, FormGroup, FormControl,  Button,  } from 'react-bootstrap';
+import {Redirect, Link} from "react-router-dom"
+import * as firebase from "firebase/app";
+import {FormGroup, FormControl,  Button,  } from 'react-bootstrap';
 
 import './App.css';
 import ChatBox from "./ChatBox.js"
@@ -11,13 +11,14 @@ class LoginPage extends React.Component {
         super(props);
 
         this.state = {
-            username: "",
-            password: "",
+            email: '',
+            password: '',
+            redirect: false,
         };
     }
 
-    setUsername(username) {
-        this.setState({username: username});
+    setEmail(email) {
+        this.setState({email: email});
     }
 
     setPassword(password){
@@ -25,39 +26,53 @@ class LoginPage extends React.Component {
     }
 
     validateForm() {
-        return this.state.username.length > 0 && this.state.password.length > 0;
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.state.email)) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     login = async(e) => {
         // prevent web page refresh
         e.preventDefault();
+        e.stopPropagation();
 
-        // GET request here
-
-        alert("You are successfully signed in...");
-        //window.location.href = "/ChatBox"
-
-        }
-
-    componentDidUpdate() {
-        //console.log(this.state);
+        await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            console.log(errorCode);
+            console.log(errorMessage);
+            alert(errorMessage);
+          });
+          
+        firebase.auth().onAuthStateChanged(function(user) {
+            if (user) {
+                this.setState({redirect: true});
+            }
+        }.bind(this));
     }
 
     render() {
 
-        const { username, password } = this.state;
+        const { email, password } = this.state;
+
+        if (this.state.redirect) {
+            return <Redirect push to="/ControlPanel" />;
+        }
 
         return (
             <div className="Login">
                 <h1>Login</h1>
                 <form className="userinput" onSubmit={ (e) => this.login(e)}>
-                    <FormGroup controlId="username">
+                    <FormGroup controlId="email">
                         <FormControl 
-                            type="text" 
-                            value={username} 
-                            name="username" 
-                            onChange={e => this.setUsername(e.target.value)}
-                            placeholder="Username" />
+                            type="email" 
+                            value={email} 
+                            name="email" 
+                            onChange={e => this.setEmail(e.target.value)}
+                            placeholder="Email" />
                     </FormGroup>
 
                     <FormGroup controlId="password">

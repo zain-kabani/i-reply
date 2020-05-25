@@ -1,87 +1,131 @@
 import React from 'react';
-import {BrowserRouter as Router, Switch, Route, Link} from "react-router-dom"
-
-import { Row, FormGroup, FormControl,  Button,  } from 'react-bootstrap';
+import {Link, Redirect} from "react-router-dom"
+import * as firebase from "firebase/app";
+import {FormGroup, FormControl,  Button,  } from 'react-bootstrap';
 
 import './App.css';
 
-class Landing extends React.Component {
+class RegisterPage extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
-            username: "",
-            email: "",
-            password: "",
+            email: '',
+            password: '',
+            errors: {
+                email: ' ',
+                password: ' ',
+              },
+            redirect: false,
         };
     }
 
-    setUsername(username) {
-        this.setState({username: username});
-    }
-
-    setEmail(email){
+    setEmail(e){
+        const email = e.target.value
+        e.preventDefault();
+        this.validateEmail(email)
         this.setState({email: email});
     }
 
-    setPassword(password){
-        this.setState({password: password});
-    }
-
-    validateForm() {
-        return this.state.username.length > 0 && this.state.password.length > 0;
-    }
-
-    login = async(e) => {
-        // prevent web page refresh
+    setPassword(e){
+        const password = e.target.value
         e.preventDefault();
+        this.validatePassword(password)
+        this.setState({password});
+    }
 
-        // GET request here
+    validateForm(){
+        return this.validateEmail(this.state.email)
+                && this.validatePassword(this.state.password);
+    }
 
-        alert("You are successfully signed in...");
-        //window.location.href = "/ChatBox"
+    validateEmail(email) {
+        let errors = this.state.errors;
+        const valid = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email));
 
+        if (!valid){
+            errors.email = "Must provide a valid email";
+        } else {
+            errors.email = " ";
         }
 
-    componentDidUpdate() {
-        //console.log(this.state);
+        return valid;
+    }
+
+    validatePassword(password) {
+        let errors = this.state.errors;
+        const valid = password.length > 7;
+
+        if (!valid){
+            errors.password = "Password must be at least 8 characters";
+        } else {
+            errors.password = " ";
+        }
+
+        return valid;
+    }
+
+    createAccount = async(e) => {
+        // prevent web page refresh
+        e.preventDefault();
+        e.stopPropagation();
+
+        if (this.validateForm){
+            // create an account with Google firebase
+            await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(errorCode);
+                console.log(errorMessage);
+                alert(errorMessage);
+            });
+
+            firebase.auth().onAuthStateChanged(function(user) {
+                if (user) {
+                    this.setState({redirect: true});
+                }
+            }.bind(this));
+            
+        } else {
+            alert("Invalid email or password!");
+        }
+
     }
 
     render() {
 
-        const { username, email, password } = this.state;
+        const { username, email, password, errors} = this.state;
+        
+        if (this.state.redirect) {
+            return <Redirect push to="/ControlPanel" />;
+        }
 
         return (
             <div className="Register">
                 <h1>Register</h1>
-                <Link to="/Login">Back to Login</Link>
-                <form className="userinput" onSubmit={ (e) => this.login(e)}>
-                    <FormGroup controlId="username">
-                        <FormControl 
-                            type="text" 
-                            value={username} 
-                            name="username" 
-                            onChange={e => this.setUsername(e.target.value)}
-                            placeholder="Username" />
-                    </FormGroup>
-
+                <form className="userinput" onSubmit={ (e) => this.createAccount(e)}>
                     <FormGroup controlId="email">
                         <FormControl 
                             type="email" 
                             value={email} 
                             name="email" 
-                            onChange={e => this.setEmail(e.target.value)}
+                            onChange={e => this.setEmail(e)}
                             placeholder="Email" />
                     </FormGroup>
+
+                    <span className="error">{errors.email}</span>
 
                     <FormGroup controlId="password">
                         <FormControl 
                             type="password" 
                             value={password} 
                             name="password" 
-                            onChange={e => this.setPassword(e.target.value)}
+                            onChange={e => this.setPassword(e)}
                             placeholder="Password" />
                     </FormGroup>
+
+                    <span className="error">{errors.password}</span>
 
                     <Button
                         type="submit" 
@@ -89,10 +133,11 @@ class Landing extends React.Component {
                         bsStyle="primary">Sign Up
                     </Button>
                 </form>
+                <Link to="/Login">Back to Login</Link>
         </div>
         );
     }
 
 }
 
-export default Landing;
+export default RegisterPage;
