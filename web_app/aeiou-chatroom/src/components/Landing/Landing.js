@@ -1,7 +1,8 @@
 import React from 'react';
 import {Link } from "react-router-dom"
 
-import './App.css';
+import '../../constants/styles.css';
+import * as ROUTES from '../../constants/routes.js'
 
 class Landing extends React.Component {
 
@@ -10,7 +11,7 @@ class Landing extends React.Component {
         return (
             <div>
                 <h1>Hello there! Please head to the login page (:</h1>
-                <Link to="/Login">Login</Link>
+                <Link to={ROUTES.LOGIN}>Login</Link>
             </div>
         );
     }

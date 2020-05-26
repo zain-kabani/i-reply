@@ -3,7 +3,8 @@ import {Link, Redirect} from "react-router-dom"
 import * as firebase from "firebase/app";
 import {FormGroup, FormControl,  Button,  } from 'react-bootstrap';
 
-import './App.css';
+import '../../constants/styles.css';
+import * as ROUTES from '../../constants/routes.js';
 
 class RegisterPage extends React.Component {
     constructor(props) {
@@ -12,6 +13,7 @@ class RegisterPage extends React.Component {
         this.state = {
             email: '',
             password: '',
+            passwordconfirm: '',
             errors: {
                 email: ' ',
                 password: ' ',
@@ -20,27 +22,30 @@ class RegisterPage extends React.Component {
         };
     }
 
-    setEmail(e){
-        const email = e.target.value
+    onChange = (e) => {
         e.preventDefault();
-        this.validateEmail(email)
-        this.setState({email: email});
-    }
-
-    setPassword(e){
-        const password = e.target.value
-        e.preventDefault();
-        this.validatePassword(password)
-        this.setState({password});
+        this.setState({[e.target.name]: e.target.value});
+        
+        switch(e.target.name){
+            case "password":
+                this.validatePassword();
+                break;
+            case "email":
+                this.validateEmail();
+                break;
+            case "passwordconfirm":
+                this.confirmPassword();
+                break;
+        }
+        
     }
 
     validateForm(){
-        return this.validateEmail(this.state.email)
-                && this.validatePassword(this.state.password);
+        return this.validateEmail() && this.validatePassword() && this.confirmPassword();
     }
 
-    validateEmail(email) {
-        let errors = this.state.errors;
+    validateEmail() {
+        let {email, errors} = this.state;
         const valid = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email));
 
         if (!valid){
@@ -52,12 +57,24 @@ class RegisterPage extends React.Component {
         return valid;
     }
 
-    validatePassword(password) {
-        let errors = this.state.errors;
+    validatePassword() {
+        let {password, errors} = this.state;
         const valid = password.length > 7;
 
         if (!valid){
             errors.password = "Password must be at least 8 characters";
+        } else {
+            this.confirmPassword();
+        }
+
+        return valid;
+    }
+
+    confirmPassword() {
+        let {password, passwordconfirm, errors} = this.state;
+        const valid = password === passwordconfirm;
+        if (!valid){
+            errors.password = "Passwords must match"
         } else {
             errors.password = " ";
         }
@@ -81,8 +98,10 @@ class RegisterPage extends React.Component {
                 alert(errorMessage);
             });
 
+            // on successful account creation, route user
             firebase.auth().onAuthStateChanged(function(user) {
                 if (user) {
+                    alert("Account created!");
                     this.setState({redirect: true});
                 }
             }.bind(this));
@@ -95,10 +114,10 @@ class RegisterPage extends React.Component {
 
     render() {
 
-        const { username, email, password, errors} = this.state;
+        const { username, email, password, passwordconfirm, errors} = this.state;
         
         if (this.state.redirect) {
-            return <Redirect push to="/ControlPanel" />;
+            return <Redirect push to={ROUTES.LOGIN} />;
         }
 
         return (
@@ -110,7 +129,7 @@ class RegisterPage extends React.Component {
                             type="email" 
                             value={email} 
                             name="email" 
-                            onChange={e => this.setEmail(e)}
+                            onChange={e => this.onChange(e)}
                             placeholder="Email" />
                     </FormGroup>
 
@@ -121,16 +140,25 @@ class RegisterPage extends React.Component {
                             type="password" 
                             value={password} 
                             name="password" 
-                            onChange={e => this.setPassword(e)}
+                            onChange={e => this.onChange(e)}
                             placeholder="Password" />
+                    </FormGroup>
+
+                    <FormGroup controlId="passwordconfirm">
+                        <FormControl 
+                            type="password" 
+                            value={passwordconfirm} 
+                            name="passwordconfirm" 
+                            onChange={e => this.onChange(e)}
+                            placeholder="Confirm password" />
                     </FormGroup>
 
                     <span className="error">{errors.password}</span>
 
                     <Button
                         type="submit" 
-                        disabled={!this.validateForm()}
-                        bsStyle="primary">Sign Up
+                        disabled={!this.validateForm()}>
+                            Sign Up
                     </Button>
                 </form>
                 <Link to="/Login">Back to Login</Link>

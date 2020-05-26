@@ -3,9 +3,9 @@ import {Redirect, Link} from "react-router-dom"
 import * as firebase from "firebase/app";
 import {FormGroup, FormControl,  Button,  } from 'react-bootstrap';
 
-import './App.css';
-import ChatBox from "./ChatBox.js"
-
+import '../../constants/styles.css';
+import * as ROUTES from '../../constants/routes.js'
+require('firebase/auth')
 class LoginPage extends React.Component {
     constructor(props) {
         super(props);
@@ -47,6 +47,10 @@ class LoginPage extends React.Component {
             alert(errorMessage);
           });
           
+        
+    }
+
+    componentDidMount() {
         firebase.auth().onAuthStateChanged(function(user) {
             if (user) {
                 this.setState({redirect: true});
@@ -59,7 +63,7 @@ class LoginPage extends React.Component {
         const { email, password } = this.state;
 
         if (this.state.redirect) {
-            return <Redirect push to="/ControlPanel" />;
+            return <Redirect push to={ROUTES.CONTROLPANEL} />;
         }
 
         return (
@@ -86,11 +90,11 @@ class LoginPage extends React.Component {
 
                     <Button
                         type="submit" 
-                        disabled={!this.validateForm()}
-                        bsStyle="primary">Sign-In
+                        disabled={!this.validateForm()}>
+                                Sign-In
                     </Button>
                 </form>
-                <Link to="/Register">Sign Up!</Link>
+                <Link to={ROUTES.REGISTER}>Sign Up!</Link>
             </div>
         );
     }

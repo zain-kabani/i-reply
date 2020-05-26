@@ -1,8 +1,8 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import './App.css';
-import ChatMessage from './ChatMessage.js'
+import '../../constants/styles.css';
+import ChatMessage from '../Chat/ChatMessage.js'
 
 class ChatBox extends React.Component {
     constructor(props) {

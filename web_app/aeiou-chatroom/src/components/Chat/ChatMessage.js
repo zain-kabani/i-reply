@@ -1,6 +1,6 @@
 import React from 'react';
 
-import './App.css';
+import '../../constants/styles.css';
 
 const ChatMessage = ({chatitem, username}) => (
     // classify as right aligned if this is the user
