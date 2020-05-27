@@ -47,7 +47,7 @@ class RegisterPage extends React.Component {
 
     validateEmail() {
         let {email} = this.state;
-        const valid = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email));
+        const valid = (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email));
 
         if (!valid){
             this.setState({validEmail: false, errorEmail: "Must provide a valid email"});

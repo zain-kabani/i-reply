@@ -6,6 +6,7 @@ import {FormGroup, FormControl,  Button,  } from 'react-bootstrap';
 import '../../constants/styles.css';
 import * as ROUTES from '../../constants/routes.js'
 require('firebase/auth')
+
 class LoginPage extends React.Component {
     constructor(props) {
         super(props);
@@ -26,7 +27,7 @@ class LoginPage extends React.Component {
     }
 
     validateForm() {
-        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(this.state.email)) {
+        if (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(this.state.email)) {
             return true;
         } else {
             return false;
@@ -48,6 +49,27 @@ class LoginPage extends React.Component {
           });
           
         
+    }
+
+    googleLogin = (e) => {
+        e.preventDefault();
+
+        firebase.auth().signInWithPopup(this.props.GoogleAuthProvider).then(function(result) {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+            this.props.user = user;
+          }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            // ...
+          });
     }
 
     componentDidMount() {
@@ -92,6 +114,11 @@ class LoginPage extends React.Component {
                         type="submit" 
                         disabled={!this.validateForm()}>
                                 Sign-In
+                    </Button>
+                </form>
+                <form className="googlesignin" onSubmit={(e) => (this.googleLogin(e))}>
+                    <Button type="submit">
+                        Sign In with Google
                     </Button>
                 </form>
                 <Link to={ROUTES.REGISTER}>Sign Up!</Link>

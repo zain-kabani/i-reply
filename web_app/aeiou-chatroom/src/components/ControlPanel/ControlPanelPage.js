@@ -44,11 +44,7 @@ class ControlPanelPage extends React.Component {
                 </div>
             )
         } else {
-            return (
-                <div>
-                    <span>not logged in</span>
-                </div>
-            )
+            return <Redirect push to={ROUTES.LOGIN} />;
         }
     }
 }

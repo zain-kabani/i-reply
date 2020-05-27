@@ -42,11 +42,11 @@ class App extends React.Component {
             <Router>
                 <div className="App">
                     <Switch>
-                        /* exact specifies rendering to exactly '/' */
+                        {/* exact specifies rendering to exactly '/' */}
                         <Route path={ROUTES.LANDING} exact component={Landing} />
 
                         <Route path={ROUTES.LOGIN} render={props => 
-                            (<Login userState={this.state.user}/>)} 
+                            (<Login userState={this.state.user} GoogleAuthProvider={this.props.GoogleAuthProvider}/>)} 
                         />
 
                         <Route path={ROUTES.CHAT} render={props => 

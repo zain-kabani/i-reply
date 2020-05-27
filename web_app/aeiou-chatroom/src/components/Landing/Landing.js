@@ -10,7 +10,8 @@ class Landing extends React.Component {
     render() {
         return (
             <div>
-                <h1>Hello there! Please head to the login page (:</h1>
+                <h1>I-Reply</h1>
+                <h3>Talk to yourself, your robot self</h3>
                 <Link to={ROUTES.LOGIN}>Login</Link>
             </div>
         );

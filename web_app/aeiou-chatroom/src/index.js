@@ -17,9 +17,11 @@ const config = {
 
 firebase.initializeApp(config);
 
+var provider = new firebase.auth.GoogleAuthProvider();
+
 ReactDOM.render(
   <React.StrictMode>
-    <App />
+    <App GoogleAuthProvider={provider}/>
   </React.StrictMode>,
   document.getElementById('root')
 );
