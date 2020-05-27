@@ -7,6 +7,7 @@ import Login from "../Login/LoginPage.js";
 import Chat from "../Chat/ChatBox.js";
 import Register from "../Register/RegisterPage.js";
 import ControlPanel from "../ControlPanel/ControlPanelPage.js";
+import ResetPassword from '../ResetPassword/ResetPasswordPage.js';
 
 import '../../constants/styles.css';
 import * as ROUTES from '../../constants/routes.js';
@@ -59,6 +60,10 @@ class App extends React.Component {
 
                         <Route path={ROUTES.CONTROLPANEL} render={props => 
                             (<ControlPanel userState={this.state.user}/>)} 
+                        />
+
+                        <Route path={ROUTES.RESETPASSWORD} render={props => 
+                            (<ResetPassword userState={this.state.user}/>)} 
                         />
                     </Switch>
                 </div>

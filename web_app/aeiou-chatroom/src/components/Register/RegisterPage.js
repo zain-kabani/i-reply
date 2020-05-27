@@ -1,7 +1,7 @@
 import React from 'react';
-import {Link, Redirect} from "react-router-dom"
+import { Link, Redirect } from "react-router-dom"
 import * as firebase from "firebase/app";
-import {FormGroup, FormControl,  Button,  } from 'react-bootstrap';
+import { FormGroup, FormControl, Button, } from 'react-bootstrap';
 
 import '../../constants/styles.css';
 import * as ROUTES from '../../constants/routes.js';
@@ -21,17 +21,17 @@ class RegisterPage extends React.Component {
             validPasswordconfirm: false,
             redirect: false,
         };
-    }   
+    }
 
     componentDidUpdate() {
         console.log(this.state);
     }
 
 
-    onChange = async(e) => {
+    onChange = async (e) => {
         e.preventDefault();
-        
-        this.setState({[e.target.name]: e.target.value}, () =>{
+
+        this.setState({ [e.target.name]: e.target.value }, () => {
             this.validateEmail();
             this.validatePassword();
             // this.confirmPassword();
@@ -39,54 +39,54 @@ class RegisterPage extends React.Component {
     }
 
 
-    validateForm(){
+    validateForm() {
         return (this.state.validEmail
-                && this.state.validPassword
-                && this.state.validPasswordconfirm);
+            && this.state.validPassword
+            && this.state.validPasswordconfirm);
     }
 
     validateEmail() {
-        let {email} = this.state;
+        let { email } = this.state;
         const valid = (/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(email));
 
-        if (!valid){
-            this.setState({validEmail: false, errorEmail: "Must provide a valid email"});
+        if (!valid) {
+            this.setState({ validEmail: false, errorEmail: "Must provide a valid email" });
         } else {
-            this.setState({validEmail: true, errorEmail: ""});
+            this.setState({ validEmail: true, errorEmail: "" });
         }
     }
 
     validatePassword() {
-        let {password} = this.state;
+        let { password } = this.state;
         const valid = password.length > 7;
 
-        if (!valid){
-            this.setState({validPassword: false, errorPassword: "Password must be at least 8 characters"});
+        if (!valid) {
+            this.setState({ validPassword: false, errorPassword: "Password must be at least 8 characters" });
         } else {
-            this.setState({validPassword: true, errorPassword: ""});
+            this.setState({ validPassword: true, errorPassword: "" });
             this.confirmPassword();
         }
     }
 
     confirmPassword() {
-        let {password, passwordconfirm} = this.state;
+        let { password, passwordconfirm } = this.state;
         const valid = (password === passwordconfirm);
 
-        if (!valid){
-            this.setState({validPasswordconfirm: false, errorPassword: "Passwords must match"});
+        if (!valid) {
+            this.setState({ validPasswordconfirm: false, errorPassword: "Passwords must match" });
         } else {
-            this.setState({validPasswordconfirm: true, errorPassword: " "});
+            this.setState({ validPasswordconfirm: true, errorPassword: " " });
         }
     }
 
-    createAccount = async(e) => {
+    createAccount = async (e) => {
         // prevent web page refresh
         e.preventDefault();
         e.stopPropagation();
 
-        if (this.validateForm){
+        if (this.validateForm) {
             // create an account with Google firebase
-            await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function(error) {
+            await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function (error) {
                 // Handle Errors here.
                 var errorCode = error.code;
                 var errorMessage = error.message;
@@ -96,13 +96,13 @@ class RegisterPage extends React.Component {
             });
 
             // on successful account creation, route user
-            firebase.auth().onAuthStateChanged(function(user) {
+            firebase.auth().onAuthStateChanged(function (user) {
                 if (user) {
                     alert("Account created!");
-                    this.setState({redirect: true});
+                    this.setState({ redirect: true });
                 }
             }.bind(this));
-            
+
         } else {
             alert("Invalid email or password!");
         }
@@ -111,8 +111,8 @@ class RegisterPage extends React.Component {
 
     render() {
 
-        const { username, email, password, passwordconfirm, errorEmail, errorPassword} = this.state;
-        
+        const { username, email, password, passwordconfirm, errorEmail, errorPassword } = this.state;
+
         if (this.state.redirect) {
             return <Redirect push to={ROUTES.LOGIN} />;
         }
@@ -120,12 +120,12 @@ class RegisterPage extends React.Component {
         return (
             <div className="Register">
                 <h1>Register</h1>
-                <form className="userinput" onSubmit={ (e) => this.createAccount(e)}>
+                <form className="userinput" onSubmit={(e) => this.createAccount(e)}>
                     <FormGroup controlId="email">
-                        <FormControl 
-                            type="email" 
-                            value={email} 
-                            name="email" 
+                        <FormControl
+                            type="email"
+                            value={email}
+                            name="email"
                             onChange={e => this.onChange(e)}
                             placeholder="Email" />
                     </FormGroup>
@@ -133,19 +133,19 @@ class RegisterPage extends React.Component {
                     <span className="error">{errorEmail}</span>
 
                     <FormGroup controlId="password">
-                        <FormControl 
-                            type="password" 
-                            value={password} 
-                            name="password" 
+                        <FormControl
+                            type="password"
+                            value={password}
+                            name="password"
                             onChange={e => this.onChange(e)}
                             placeholder="Password" />
                     </FormGroup>
 
                     <FormGroup controlId="passwordconfirm">
-                        <FormControl 
-                            type="password" 
-                            value={passwordconfirm} 
-                            name="passwordconfirm" 
+                        <FormControl
+                            type="password"
+                            value={passwordconfirm}
+                            name="passwordconfirm"
                             onChange={e => this.onChange(e)}
                             placeholder="Confirm password" />
                     </FormGroup>
@@ -153,13 +153,16 @@ class RegisterPage extends React.Component {
                     <span className="error">{errorPassword}</span>
 
                     <Button
-                        type="submit" 
+                        type="submit"
                         disabled={!this.validateForm()}>
-                            Sign Up
+                        Sign Up
                     </Button>
                 </form>
-                <Link to="/Login">Back to Login</Link>
-        </div>
+                <div className="backtologin">
+                    <Link to="/Login">Back to Login</Link>
+                </div>
+
+            </div>
         );
     }
 
