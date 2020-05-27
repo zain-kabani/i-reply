@@ -7,3 +7,15 @@ To start react front-end run
 
 To start express back-end run 
 ### `npm run server`
+
+## Notes
+Authentication uses Google Firebase and requires a `.env` configuration file for Firebase in the root folder under this format: 
+```
+REACT_APP_API_KEY=
+REACT_APP_AUTH_DOMAIN=
+REACT_APP_DATABASE_URL=
+REACT_APP_PROJECT_ID=
+REACT_APP_STORAGE_BUCKET=
+REACT_APP_MESSAGING_SENDER_ID=
+REACT_APP_appId=
+```
