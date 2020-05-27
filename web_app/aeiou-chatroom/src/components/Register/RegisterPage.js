@@ -14,72 +14,69 @@ class RegisterPage extends React.Component {
             email: '',
             password: '',
             passwordconfirm: '',
-            errors: {
-                email: ' ',
-                password: ' ',
-              },
+            errorEmail: ' ',
+            errorPassword: ' ',
+            validEmail: false,
+            validPassword: false,
+            validPasswordconfirm: false,
             redirect: false,
         };
+    }   
+
+    componentDidUpdate() {
+        console.log(this.state);
     }
 
-    onChange = (e) => {
+
+    onChange = async(e) => {
         e.preventDefault();
-        this.setState({[e.target.name]: e.target.value});
         
-        switch(e.target.name){
-            case "password":
-                this.validatePassword();
-                break;
-            case "email":
-                this.validateEmail();
-                break;
-            case "passwordconfirm":
-                this.confirmPassword();
-                break;
-        }
-        
+        this.setState({[e.target.name]: e.target.value}, () =>{
+            this.validateEmail();
+            this.validatePassword();
+            // this.confirmPassword();
+        });
     }
+
 
     validateForm(){
-        return this.validateEmail() && this.validatePassword() && this.confirmPassword();
+        return (this.state.validEmail
+                && this.state.validPassword
+                && this.state.validPasswordconfirm);
     }
 
     validateEmail() {
-        let {email, errors} = this.state;
+        let {email} = this.state;
         const valid = (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(email));
 
         if (!valid){
-            errors.email = "Must provide a valid email";
+            this.setState({validEmail: false, errorEmail: "Must provide a valid email"});
         } else {
-            errors.email = " ";
+            this.setState({validEmail: true, errorEmail: ""});
         }
-
-        return valid;
     }
 
     validatePassword() {
-        let {password, errors} = this.state;
+        let {password} = this.state;
         const valid = password.length > 7;
 
         if (!valid){
-            errors.password = "Password must be at least 8 characters";
+            this.setState({validPassword: false, errorPassword: "Password must be at least 8 characters"});
         } else {
+            this.setState({validPassword: true, errorPassword: ""});
             this.confirmPassword();
         }
-
-        return valid;
     }
 
     confirmPassword() {
-        let {password, passwordconfirm, errors} = this.state;
-        const valid = password === passwordconfirm;
-        if (!valid){
-            errors.password = "Passwords must match"
-        } else {
-            errors.password = " ";
-        }
+        let {password, passwordconfirm} = this.state;
+        const valid = (password === passwordconfirm);
 
-        return valid;
+        if (!valid){
+            this.setState({validPasswordconfirm: false, errorPassword: "Passwords must match"});
+        } else {
+            this.setState({validPasswordconfirm: true, errorPassword: " "});
+        }
     }
 
     createAccount = async(e) => {
@@ -114,7 +111,7 @@ class RegisterPage extends React.Component {
 
     render() {
 
-        const { username, email, password, passwordconfirm, errors} = this.state;
+        const { username, email, password, passwordconfirm, errorEmail, errorPassword} = this.state;
         
         if (this.state.redirect) {
             return <Redirect push to={ROUTES.LOGIN} />;
@@ -133,7 +130,7 @@ class RegisterPage extends React.Component {
                             placeholder="Email" />
                     </FormGroup>
 
-                    <span className="error">{errors.email}</span>
+                    <span className="error">{errorEmail}</span>
 
                     <FormGroup controlId="password">
                         <FormControl 
@@ -153,7 +150,7 @@ class RegisterPage extends React.Component {
                             placeholder="Confirm password" />
                     </FormGroup>
 
-                    <span className="error">{errors.password}</span>
+                    <span className="error">{errorPassword}</span>
 
                     <Button
                         type="submit" 
