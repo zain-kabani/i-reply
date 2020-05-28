@@ -28,7 +28,7 @@ class RegisterPage extends React.Component {
     }
 
 
-    onChange = async (e) => {
+    onChange = (e) => {
         e.preventDefault();
 
         this.setState({ [e.target.name]: e.target.value }, () => {
@@ -120,6 +120,7 @@ class RegisterPage extends React.Component {
         return (
             <div className="Register">
                 <h1>Register</h1>
+                <span>Make a new account </span>
                 <form className="userinput" onSubmit={(e) => this.createAccount(e)}>
                     <FormGroup controlId="email">
                         <FormControl

@@ -18,7 +18,7 @@ class LoginPage extends React.Component {
         };
     }
 
-    onChange = async (e) => {
+    onChange = (e) => {
         e.preventDefault();
 
         this.setState({ [e.target.name]: e.target.value });
@@ -94,6 +94,7 @@ class LoginPage extends React.Component {
         return (
             <div className="Login">
                 <h1>Login</h1>
+                <span>Login to your account</span>
                 <form className="userinput" onSubmit={(e) => this.login(e)}>
                     <FormGroup controlId="email">
                         <FormControl
