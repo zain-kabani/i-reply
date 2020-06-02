@@ -5,7 +5,7 @@ This project was bootstrapped with [Create React App](https://github.com/faceboo
 To start react front-end run
 ### `npm start`
 
-To start express back-end run 
+To start express back-end run (note: this backend is no longer necessary as all chatlogs are now stored in Firebase)
 ### `npm run server`
 
 ## Notes
