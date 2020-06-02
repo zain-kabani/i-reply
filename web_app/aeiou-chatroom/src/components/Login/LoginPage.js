@@ -1,6 +1,5 @@
 import React from 'react';
 import { Redirect, Link } from "react-router-dom"
-import * as firebase from "firebase/app";
 import { FormGroup, FormControl, Button, } from 'react-bootstrap';
 
 import '../../constants/styles.css';
@@ -37,13 +36,13 @@ class LoginPage extends React.Component {
         e.preventDefault();
         e.stopPropagation();
 
-        await firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function (error) {
+        await this.props.firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function (error) {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
             console.log(errorCode);
             console.log(errorMessage);
-            if (errorCode == "auth/user-not-found"){
+            if (errorCode === "auth/user-not-found"){
                 alert("Email or password incorrect. Please double check and try again.");
             } else {
                 alert(errorMessage);
@@ -57,7 +56,7 @@ class LoginPage extends React.Component {
     googleLogin = (e) => {
         e.preventDefault();
 
-        firebase.auth().signInWithPopup(this.props.GoogleAuthProvider).then(function (result) {
+        this.props.firebase.auth().signInWithPopup(this.props.GoogleAuthProvider).then(function (result) {
             // This gives you a Google Access Token. You can use it to access the Google API.
             var token = result.credential.accessToken;
             // The signed-in user info.
@@ -76,7 +75,7 @@ class LoginPage extends React.Component {
     }
 
     componentDidMount() {
-        firebase.auth().onAuthStateChanged(function (user) {
+        this.props.firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 this.setState({ redirect: true });
             }
@@ -88,7 +87,7 @@ class LoginPage extends React.Component {
         const { email, password } = this.state;
 
         if (this.state.redirect) {
-            return <Redirect push to={ROUTES.CONTROLPANEL} />;
+            return <Redirect push to={ROUTES.CHAT} />;
         }
 
         return (

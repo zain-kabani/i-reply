@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link, Redirect } from "react-router-dom"
-import * as firebase from "firebase/app";
 import { FormGroup, FormControl, Button, } from 'react-bootstrap';
 
 import '../../constants/styles.css';
@@ -85,8 +84,8 @@ class RegisterPage extends React.Component {
         e.stopPropagation();
 
         if (this.validateForm) {
-            // create an account with Google firebase
-            await firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function (error) {
+            // create an account with Google this.props.firebase
+            await this.props.firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password).catch(function (error) {
                 // Handle Errors here.
                 var errorCode = error.code;
                 var errorMessage = error.message;
@@ -96,7 +95,7 @@ class RegisterPage extends React.Component {
             });
 
             // on successful account creation, route user
-            firebase.auth().onAuthStateChanged(function (user) {
+            this.props.firebase.auth().onAuthStateChanged(function (user) {
                 if (user) {
                     alert("Account created!");
                     this.setState({ redirect: true });

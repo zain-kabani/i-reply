@@ -9,7 +9,8 @@ class ChatBox extends React.Component {
         super(props);
 
         this.state = {
-            username: "User",
+            email: "",
+            conversationId: "",
             chatlog: []
         };
     }
@@ -19,33 +20,72 @@ class ChatBox extends React.Component {
         chatRef.scrollTop = chatRef.scrollHeight;
     }
 
+    async componentDidMount() {
+        // check for user authentication
+        await this.props.firebase.auth().onAuthStateChanged(function (user) {
+            if (user) {
+                // set intial states for username, conversationId
+                this.setState({ email: this.props.user.email, conversationId: "chatbot 1" })
+                // get chatlog
+                this.loadChatLog(user);
+            }
+        }.bind(this));
+
+        console.log(this.props.user.uid);
+    }
+
+    loadChatLog(user){
+        this.props.firebase.database().ref(
+            'users/'
+            + user.uid
+            + '/conversations/'
+            + this.state.conversationId
+            + '/thread'
+        ).orderByChild("created").once("value", function (chatlog) {
+            // this.setState({chatlog: chatlog.val()});
+            var mergedarray = [];
+            var retrievedlogs = chatlog.val();
+            for (var key in retrievedlogs) {
+                mergedarray.push(retrievedlogs[key]);
+            }
+            this.setState({ chatlog: mergedarray })
+            console.log(mergedarray);
+        }.bind(this))
+    }
+
     addMessage = (databody) => {
         // add the message to the chatlog
         this.setState((prevState) => ({
             chatlog: [...prevState.chatlog,
             {
-                user: databody.user,
-                message: <p>{databody.message}</p>
+                email: databody.email,
+                content: databody.content
             }]
         }), () => {
             // clear message input box after adding new message to chatlog
             ReactDOM.findDOMNode(this.refs.message).value = "";
         });
-
     }
 
     submitMessage = (eh) => {
         // prevent web page refresh
         eh.preventDefault();
-
+        console.log(this.state)
         const userMessage = ReactDOM.findDOMNode(this.refs.message).value;
         if (userMessage.trim() === "") {
             console.log("empty input");
         } else {
-            let databody = { "user": this.state.username, "message": userMessage };
+            var d = new Date();
+            let databody = {
+                "senderID": this.props.user.uid,
+                "senderName": this.props.user.email,
+                "content": userMessage,
+                "created": d.getTime(),
+            };
             this.addMessage(databody);
 
             // send the message to the backend
+            /*
             const requestOptions = {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },
@@ -55,6 +95,14 @@ class ChatBox extends React.Component {
             fetch('/test_api', requestOptions)
                 .then(response => response.json())
                 .then(data => this.addMessage({ "user": "Bot", "message": data.message }));
+                */
+            // store the message to Firebase
+            this.props.firebase.database().ref('users/'
+                + this.props.user.uid
+                + '/conversations/'
+                + this.state.conversationId
+                + '/thread/'
+            ).push(databody);
         }
     }
 
@@ -67,7 +115,7 @@ class ChatBox extends React.Component {
                         this.state.chatlog.map((chatitem) =>
                             <ChatMessage
                                 chatitem={chatitem}
-                                username={this.state.username}
+                                email={this.state.email}
                             />
                         )
                     }

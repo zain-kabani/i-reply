@@ -1,6 +1,6 @@
 import React from 'react';
 import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
-import * as firebase from "firebase/app";
+import * as firebase from "firebase";
 
 import Landing from "../Landing/Landing.js";
 import Login from "../Login/LoginPage.js";
@@ -19,7 +19,9 @@ class App extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            user: {}
+            user: {},
+            firebase: firebase,
+            GoogleAuthProvider: this.props.GoogleAuthProvider,
         }
     }
 
@@ -47,23 +49,23 @@ class App extends React.Component {
                         <Route path={ROUTES.LANDING} exact component={Landing} />
 
                         <Route path={ROUTES.LOGIN} render={props => 
-                            (<Login userState={this.state.user} GoogleAuthProvider={this.props.GoogleAuthProvider}/>)} 
+                            (<Login {...this.state}/>)} 
                         />
 
                         <Route path={ROUTES.CHAT} render={props => 
-                            (<Chat userState={this.state.user}/>)} 
+                            (<Chat {...this.state}/>)} 
                         />
 
                         <Route path={ROUTES.REGISTER} render={props => 
-                            (<Register userState={this.state.user}/>)} 
+                            (<Register {...this.state}/>)} 
                         />
 
                         <Route path={ROUTES.CONTROLPANEL} render={props => 
-                            (<ControlPanel userState={this.state.user}/>)} 
+                            (<ControlPanel {...this.state}/>)} 
                         />
 
                         <Route path={ROUTES.RESETPASSWORD} render={props => 
-                            (<ResetPassword userState={this.state.user}/>)} 
+                            (<ResetPassword {...this.state}/>)} 
                         />
                     </Switch>
                 </div>
