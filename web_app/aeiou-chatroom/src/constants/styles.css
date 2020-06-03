@@ -169,18 +169,83 @@ h3 {
 	font-family: 'Quicksand', sans-serif;
 	}
 
+.Chatpage {
+	font-family: 'Quicksand', sans-serif;
+  color: var(--text-colour);
+	display: flex;
+	flex-direction: row;
+	width: 100vw;
+	height: 100vh;
+	background-color: var(--chatbox-bg-colour);
+	border-radius: 8px;
+	overflow: hidden;
+	justify-content: space-between;
+	/**box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.75);*/
+}
+
+.Chatpage .conversationlist{
+	display: flex;
+	flex-direction: column;
+	width: 20%;
+	min-width: 250px;
+}
+
+.Chatpage .conversationlist .toolbar {
+	font-family: 'Quicksand', sans-serif;
+	display: flex;
+	background-color: var(--title-background-colour);
+	color: var(--title-text-colour);
+	height: 40px;
+	margin: 0;
+	padding: 5px;
+	align-items: center;
+	justify-content: space-between;
+	box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, 0.45);
+}
+
+.Chatpage .conversationlist .conversations {
+	width: 100%;
+	height: 100%;
+	overflow-y: scroll;
+}
+
+.Chatpage .conversationlist .conversations .conversation-list-item {
+	display: flex;
+	width: auto;
+	align-items: center;
+	padding: 10px;
+	border: 2px solid var(--user-input-colour);
+  }
+  
+.Chatpage .conversationlist .conversations .conversation-list-item:hover {
+	background: #eeeef1;
+	cursor: pointer;
+  }
+
+.Chatpage .conversationlist .conversations .conversation-title {
+	font-size: 14px;
+	font-weight: bold;
+	text-transform: capitalize;
+	margin: 0;
+  }
+
+.Chatpage .chatbox {
+	width: 100%;
+	min-width: 350px;
+}
+
 .chatbox {
   font-family: 'Quicksand', sans-serif;
   color: var(--text-colour);
 	display: flex;
 	flex-direction: column;
-	width: 90vw;
-	height: 95vh;
+	height: auto;
+	width: auto;
 	background-color: var(--chatbox-bg-colour);
 	border-radius: 8px;
 	overflow: hidden;
 	justify-content: space-between;
-	box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.75);
+	/*box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.75);*/
 }
 
 .chatbox h1 {

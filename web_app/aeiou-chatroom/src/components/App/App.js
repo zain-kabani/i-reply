@@ -4,7 +4,7 @@ import * as firebase from "firebase";
 
 import Landing from "../Landing/Landing.js";
 import Login from "../Login/LoginPage.js";
-import Chat from "../Chat/ChatBox.js";
+import Chat from "../Chat/Chat.js";
 import Register from "../Register/RegisterPage.js";
 import ControlPanel from "../ControlPanel/ControlPanelPage.js";
 import ResetPassword from '../ResetPassword/ResetPasswordPage.js';

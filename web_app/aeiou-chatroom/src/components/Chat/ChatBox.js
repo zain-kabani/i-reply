@@ -25,7 +25,7 @@ class ChatBox extends React.Component {
         await this.props.firebase.auth().onAuthStateChanged(function (user) {
             if (user) {
                 // set intial states for username, conversationId
-                this.setState({ email: this.props.user.email, conversationId: "chatbot 1" })
+                this.setState({ email: this.props.user.email, conversationId: this.props.conversationId })
                 // get chatlog
                 this.loadChatLog(user);
             }
