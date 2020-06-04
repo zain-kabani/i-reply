@@ -8,14 +8,13 @@ import * as ROUTES from '../../constants/routes.js'
 import ChatBox from './ChatBox';
 require('firebase/auth')
 
-var conversationId = "";
-
 class Chat extends React.Component {
     constructor(props) {
         super(props);
 
         this.state = {
             email: '',
+            conversationId: "",
             redirect: false,
             conversations: [],
         };
@@ -29,6 +28,9 @@ class Chat extends React.Component {
                 this.setState({ email: this.props.user.email });
                 // get chatlog
                 this.loadConversations(user);
+            } else {
+                // redirect back to login page
+                this.setState({ redirect: true });
             }
         }.bind(this));
     }
@@ -51,43 +53,59 @@ class Chat extends React.Component {
         }.bind(this))
     }
 
-    /*setConversation(e){
-        e.stopPropogation();
-        this.setState({conversationId: conversation.name})
-    }*/
+    setConversation(conversationId) {
+        this.setState({ conversationId });
+        console.log(conversationId);
+    }
+
+    logOut(e) {
+        this.props.firebase.auth().signOut().then(function () {
+            this.setState({ redirect: true });
+        }.bind(this)).catch(function (error) {
+            // An error happened.
+            alert(error);
+        });
+    }
 
     render() {
-        return (
-            <div className="Chatpage">
-                <div className="conversationlist">
-                    <div className="toolbar">
-                        <div className="left-items">
-                            <Button>Settings</Button>
+        if (this.state.redirect) {
+            return <Redirect push to={ROUTES.LOGIN} />;
+        } else {
+            return (
+                <div className="Chatpage">
+                    <div className="conversationlist">
+                        <div className="toolbar">
+                            <div className="left-items">
+                                <Button>Settings</Button>
+                            </div>
+                            <h1>Bots</h1>
+                            <div className="right-items">
+                                <Button>+</Button>
+                            </div>
                         </div>
-                        <h1>Bots</h1>
-                        <div className="right-items">
-                            <Button>+</Button>
-                        </div>
-                    </div>
-                    <div className="conversations">
-                        {
-                            this.state.conversations.map(conversation => (
-                                <div className="conversation-list-item" onClick={conversationId = conversation.name}>
-                                    <div className="conversation-info">
-                                        <h1 className="conversation-title">{conversation.name}</h1>
-                                        {/* <p className="conversation-snippet">{conversation.lastmessage}</p> */}
+                        <div className="conversations">
+                            {
+                                this.state.conversations.map(conversation => (
+                                    <div className="conversation-list-item" onClick={e => { this.setConversation(conversation.name) }}>
+                                        <div className="conversation-info">
+                                            <h1 className="conversation-title">{conversation.name}</h1>
+                                            {/* <p className="conversation-snippet">{conversation.lastmessage}</p> */}
+                                        </div>
                                     </div>
-                                </div>
-                            )
-                            )
-                        }
+                                )
+                                )
+                            }
+                        </div>
+                        <div className="bottombar">
+                            <Button onClick={e => { this.logOut(e) }}>Log Out</Button>
+                        </div>
+                    </div>
+                    <div className="chatbox">
+                        <ChatBox {...this.props} {...this.state} key={this.state.conversationId} />
                     </div>
                 </div>
-                <div className="chatbox">
-                    <ChatBox {...this.props} {...this.state} conversationId={conversationId} />
-                </div>
-            </div>
-        );
+            );
+        }
     }
 
 }

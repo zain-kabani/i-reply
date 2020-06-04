@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Switch, Route } from "react-router-dom"
+import { BrowserRouter as Router, Switch, Route, Redirect} from "react-router-dom"
 import * as firebase from "firebase";
 
 import Landing from "../Landing/Landing.js";
@@ -30,12 +30,12 @@ class App extends React.Component {
     }
 
     authListener() {
-        firebase.auth().onAuthStateChanged(function(user){
+        firebase.auth().onAuthStateChanged(function (user) {
             // if user is logged in
             if (user) {
-                this.setState({user: user});
+                this.setState({ user: user });
             } else {
-                this.setState({user: null});
+                this.setState({ user: null });
             }
         }.bind(this))
     }
@@ -48,25 +48,27 @@ class App extends React.Component {
                         {/* exact specifies rendering to exactly '/' */}
                         <Route path={ROUTES.LANDING} exact component={Landing} />
 
-                        <Route path={ROUTES.LOGIN} render={props => 
-                            (<Login {...this.state}/>)} 
+                        <Route path={ROUTES.LOGIN} render={props =>
+                            (<Login {...this.state} />)}
                         />
 
-                        <Route path={ROUTES.CHAT} render={props => 
-                            (<Chat {...this.state}/>)} 
+                        <Route path={ROUTES.CHAT} render={props =>
+                            (<Chat {...this.state} />)}
                         />
 
-                        <Route path={ROUTES.REGISTER} render={props => 
-                            (<Register {...this.state}/>)} 
+                        <Route path={ROUTES.REGISTER} render={props =>
+                            (<Register {...this.state} />)}
                         />
 
-                        <Route path={ROUTES.CONTROLPANEL} render={props => 
-                            (<ControlPanel {...this.state}/>)} 
+                        <Route path={ROUTES.CONTROLPANEL} render={props =>
+                            (<ControlPanel {...this.state} />)}
                         />
 
-                        <Route path={ROUTES.RESETPASSWORD} render={props => 
-                            (<ResetPassword {...this.state}/>)} 
+                        <Route path={ROUTES.RESETPASSWORD} render={props =>
+                            (<ResetPassword {...this.state} />)}
                         />
+
+                        <Redirect to="/" />
                     </Switch>
                 </div>
             </Router>

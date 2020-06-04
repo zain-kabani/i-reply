@@ -215,19 +215,31 @@ h3 {
 	align-items: center;
 	padding: 10px;
 	border: 2px solid var(--user-input-colour);
-  }
+}
   
 .Chatpage .conversationlist .conversations .conversation-list-item:hover {
 	background: #eeeef1;
 	cursor: pointer;
-  }
+}
 
 .Chatpage .conversationlist .conversations .conversation-title {
 	font-size: 14px;
 	font-weight: bold;
 	text-transform: capitalize;
 	margin: 0;
-  }
+}
+
+.Chatpage .conversationlist .bottombar{
+	display: flex;
+	background-color: var(--title-background-colour);
+	color: var(--title-text-colour);
+	height: 40px;
+	margin: 0;
+	padding: 5px;
+	align-items: center;
+	justify-content: center;
+	box-shadow: 0px 3px 2px 0px rgba(0, 0, 0, 0.45);
+}
 
 .Chatpage .chatbox {
 	width: 100%;
