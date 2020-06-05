@@ -2,7 +2,6 @@ import React from 'react';
 import { Redirect } from "react-router-dom"
 import { Row, FormGroup, FormControl, Button } from 'react-bootstrap';
 
-import '../../constants/styles.css';
 import * as ROUTES from '../../constants/routes.js'
 
 class ControlPanelPage extends React.Component {

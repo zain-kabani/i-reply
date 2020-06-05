@@ -3,7 +3,6 @@ import { Link, Redirect } from "react-router-dom"
 import * as firebase from "firebase/app";
 import { FormGroup, FormControl, Button, } from 'react-bootstrap';
 
-import '../../constants/styles.css';
 import * as ROUTES from '../../constants/routes.js';
 
 class ResetPasswordPage extends React.Component {

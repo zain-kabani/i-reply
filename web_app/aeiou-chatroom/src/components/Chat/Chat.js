@@ -3,9 +3,9 @@ import { Redirect, Link } from "react-router-dom"
 import * as firebase from "firebase/app";
 import { FormGroup, FormControl, Button, } from 'react-bootstrap';
 
-import '../../constants/styles.css';
 import * as ROUTES from '../../constants/routes.js'
 import ChatBox from './ChatBox';
+import ConversationList from './ConversationList'
 require('firebase/auth')
 
 class Chat extends React.Component {
@@ -53,18 +53,9 @@ class Chat extends React.Component {
         }.bind(this))
     }
 
-    setConversation(conversationId) {
+    setConversation = (conversationId) => {
         this.setState({ conversationId });
         console.log(conversationId);
-    }
-
-    logOut(e) {
-        this.props.firebase.auth().signOut().then(function () {
-            this.setState({ redirect: true });
-        }.bind(this)).catch(function (error) {
-            // An error happened.
-            alert(error);
-        });
     }
 
     render() {
@@ -73,36 +64,8 @@ class Chat extends React.Component {
         } else {
             return (
                 <div className="Chatpage">
-                    <div className="conversationlist">
-                        <div className="toolbar">
-                            <div className="left-items">
-                                <Button>Settings</Button>
-                            </div>
-                            <h1>Bots</h1>
-                            <div className="right-items">
-                                <Button>+</Button>
-                            </div>
-                        </div>
-                        <div className="conversations">
-                            {
-                                this.state.conversations.map(conversation => (
-                                    <div className="conversation-list-item" onClick={e => { this.setConversation(conversation.name) }}>
-                                        <div className="conversation-info">
-                                            <h1 className="conversation-title">{conversation.name}</h1>
-                                            {/* <p className="conversation-snippet">{conversation.lastmessage}</p> */}
-                                        </div>
-                                    </div>
-                                )
-                                )
-                            }
-                        </div>
-                        <div className="bottombar">
-                            <Button onClick={e => { this.logOut(e) }}>Log Out</Button>
-                        </div>
-                    </div>
-                    <div className="chatbox">
-                        <ChatBox {...this.props} {...this.state} key={this.state.conversationId} />
-                    </div>
+                    <ConversationList {...this.props} {...this.state} setConversation={this.setConversation} />
+                    <ChatBox {...this.props} {...this.state} key={this.state.conversationId} />
                 </div>
             );
         }

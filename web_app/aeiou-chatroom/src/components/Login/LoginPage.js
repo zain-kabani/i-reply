@@ -2,7 +2,6 @@ import React from 'react';
 import { Redirect, Link } from "react-router-dom"
 import { FormGroup, FormControl, Button, } from 'react-bootstrap';
 
-import '../../constants/styles.css';
 import * as ROUTES from '../../constants/routes.js'
 require('firebase/auth')
 
@@ -36,19 +35,21 @@ class LoginPage extends React.Component {
         e.preventDefault();
         e.stopPropagation();
 
-        await this.props.firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password).catch(function (error) {
-            // Handle Errors here.
-            var errorCode = error.code;
-            var errorMessage = error.message;
-            console.log(errorCode);
-            console.log(errorMessage);
-            if (errorCode === "auth/user-not-found"){
-                alert("Email or password incorrect. Please double check and try again.");
-            } else {
-                alert(errorMessage);
-            }
-            
-        });
+        await this.props.firebase.auth()
+            .signInWithEmailAndPassword(this.state.email, this.state.password)
+            .catch(function (error) {
+                // Handle Errors here.
+                var errorCode = error.code;
+                var errorMessage = error.message;
+                console.log(errorCode);
+                console.log(errorMessage);
+                if (errorCode === "auth/user-not-found") {
+                    alert("Email or password incorrect. Please double check and try again.");
+                } else {
+                    alert(errorMessage);
+                }
+
+            });
 
 
     }
@@ -126,7 +127,9 @@ class LoginPage extends React.Component {
                 <span>OR</span>
                 <form className="googlesignin" onSubmit={(e) => (this.googleLogin(e))}>
                     <Button type="submit">
-                        <img className="googleicon" alt="Google sign-in" src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
+                        <img className="googleicon"
+                            alt="Google sign-in"
+                            src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/53/Google_%22G%22_Logo.svg/512px-Google_%22G%22_Logo.svg.png" />
                         {' '}Sign in with Google
                     </Button>
                 </form>
