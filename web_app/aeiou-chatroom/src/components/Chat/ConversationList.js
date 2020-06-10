@@ -1,12 +1,12 @@
 import React from 'react';
-import { FormGroup, FormControl, Button, } from 'react-bootstrap';
+import {Button, } from 'react-bootstrap';
 
 class ConversationList extends React.Component {
 
     logOut(e) {
         this.props.firebase.auth().signOut().then(function () {
             // successfully log out
-        }.bind(this)).catch(function (error) {
+        }).catch(function (error) {
             // An error happened.
             alert(error);
         });

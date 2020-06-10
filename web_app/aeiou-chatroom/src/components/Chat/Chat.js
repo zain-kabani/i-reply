@@ -1,7 +1,5 @@
 import React from 'react';
-import { Redirect, Link } from "react-router-dom"
-import * as firebase from "firebase/app";
-import { FormGroup, FormControl, Button, } from 'react-bootstrap';
+import { Redirect, } from "react-router-dom"
 
 import * as ROUTES from '../../constants/routes.js'
 import ChatBox from './ChatBox';
@@ -29,7 +27,7 @@ class Chat extends React.Component {
                 // get chatlog
                 this.loadConversations(user);
             } else {
-                // redirect back to login page
+                // if not logged in, redirect back to login page
                 this.setState({ redirect: true });
             }
         }.bind(this));

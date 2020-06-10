@@ -41,6 +41,11 @@ class ResetPasswordPage extends React.Component {
 
     render() {
         const { email } = this.state;
+
+        if (this.state.redirect) {
+            return <Redirect push to={ROUTES.LOGIN} />;
+        }
+
         return (
             <div className="Resetpassword">
                 <h1>

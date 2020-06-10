@@ -1,8 +1,8 @@
 import React from 'react';
 
-const ChatMessage = ({chatitem, email}) => (
+const ChatMessage = ({chatitem, userId}) => (
     // classify as right aligned if this is the user
-    <li className={"message " + (email === chatitem.senderName ? "right" : "left")}>
+    <li className={"message " + (userId === chatitem.senderID + '' ? "right" : "left")}>
         <p>{chatitem.content}</p>
     </li>
 );

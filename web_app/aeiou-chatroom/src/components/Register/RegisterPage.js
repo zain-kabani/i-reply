@@ -111,7 +111,7 @@ class RegisterPage extends React.Component {
 
     render() {
 
-        const { username, email, password, passwordconfirm, errorEmail, errorPassword } = this.state;
+        const { email, password, passwordconfirm, errorEmail, errorPassword } = this.state;
 
         if (this.state.redirect) {
             return <Redirect push to={ROUTES.LOGIN} />;

@@ -254,7 +254,7 @@ h3 {
 	height: auto;
 	width: auto;
 	background-color: var(--chatbox-bg-colour);
-	border-radius: 8px;
+	border-radius: 0px;
 	overflow: hidden;
 	justify-content: space-between;
 	/*box-shadow: 0px 2px 5px 0px rgba(0, 0, 0, 0.75);*/
@@ -265,6 +265,7 @@ h3 {
 	display: flex;
 	background-color: var(--title-background-colour);
 	color: var(--title-text-colour);
+	min-height: 40px;
 	margin: 0;
 	padding: 5px;
 	align-items: center;

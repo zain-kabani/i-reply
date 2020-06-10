@@ -8,9 +8,9 @@ class ChatBox extends React.Component {
         super(props);
 
         this.state = {
-            email: "",
-            conversationId: "",
-            chatlog: []
+            chatlog: [],
+            redirect: false,
+            conversationId: ""
         };
     }
 
@@ -22,14 +22,15 @@ class ChatBox extends React.Component {
     async componentDidMount() {
         // check for user authentication
         await this.props.firebase.auth().onAuthStateChanged(function (user) {
-            if (user) {
-                // set intial states for username, conversationId
-                this.setState({ email: this.props.user.email, conversationId: this.props.conversationId})
+            if (user && this.props.user) {
+                // set conversationId / header title
+                this.setState({ 
+                    conversationId: this.props.conversationId
+                })
                 // get chatlog
                 this.loadChatLog(user);
             }
         }.bind(this));
-        console.log("loading chatbox" + this.props.user.uid);
     }
 
     loadChatLog(user){
@@ -107,14 +108,20 @@ class ChatBox extends React.Component {
     render() {
         return (
             <div className="chatbox">
-                <h1>aeiou chatbox</h1>
+                <h1>{this.state.conversationId}</h1>
                 <ul className="chatmessages" ref="chatmessages">
                     {
                         this.state.chatlog.map((chatitem) =>
-                            <ChatMessage
-                                chatitem={chatitem}
-                                email={this.state.email}
-                            />
+                            {
+                                // only map is user is not null
+                                if (this.props.user) {
+                                    return (<ChatMessage
+                                        chatitem={chatitem}
+                                        userId={this.props.user.uid}
+                                    />
+                                    )
+                                }
+                            }
                         )
                     }
                 </ul>

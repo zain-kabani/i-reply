@@ -33,12 +33,18 @@ class App extends React.Component {
         firebase.auth().onAuthStateChanged(function (user) {
             // if user is logged in
             if (user) {
+                console.log("APP: user has been logged in");
                 this.setState({ user: user });
             } else {
+                console.log("APP: user has been logged out");
                 this.setState({ user: null });
             }
         }.bind(this))
     }
+
+    /*setGlobalUser(user) {
+        this.setState({user: user});
+    }*/
 
     render() {
         return (
